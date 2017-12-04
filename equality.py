@@ -1,3 +1,6 @@
+from collections import defaultdict
+
+
 def equality_classes(A, Q, trans, output):
     C = one_equality_classes(A, Q, output)
     i = 1
@@ -13,30 +16,20 @@ def equality_classes(A, Q, trans, output):
 
 
 def one_equality_classes(A, Q, output):
-    C = {}
+    C = defaultdict(set)
     for q in Q:
-        f = out_footprint(A, output[q])
-        if f in C:
-            C[f].add(q)
-        else:
-            C[f] = {q}
+        footprint = tuple([output[q][a] for a in A])
+        C[footprint].add(q)
     return list(C.values())
-
-
-def out_footprint(A, q_out):
-    return "".join([q_out[a] for a in A])
 
 
 def next_level_equality_classes(A, C, trans):
     C_ = []
     for c in C:
-        S = {}
+        S = defaultdict(set)
         for q in c:
             f = transitions_footprint(A, C, trans[q])
-            if f in S:
-                S[f].add(q)
-            else:
-                S[f] = {q}
+            S[f].add(q)
         C_.extend(S.values())
     return C_
 

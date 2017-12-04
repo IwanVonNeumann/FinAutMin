@@ -34,15 +34,13 @@ def next_level_equality_classes(A, C, trans):
     return C_
 
 
+# TODO simplify using hashed types
 def transitions_footprint(A, C, q_trans):
-    class_footprints = list()
+    class_footprints = []
     for a in A:
         q_ = q_trans[a]
         for c in C:
             if q_ in c:
-                class_footprints.append(class_footprint(c))
-    return "_".join(class_footprints)
-
-
-def class_footprint(c):
-    return "".join(sorted(list(c)))
+                footprint = frozenset(c)
+                class_footprints.append(footprint)
+    return tuple(class_footprints)
